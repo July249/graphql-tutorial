@@ -11,6 +11,7 @@ const movies = [
       'https://yts.mx/assets/images/movies/avengers_endgame_2019/medium-cover.jpg',
     genres: ['Thriller', 'Action'],
     year: '2019',
+    userId: 2,
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ const movies = [
       'https://yts.mx/assets/images/movies/avengers_endgame_2019/medium-cover.jpg',
     genres: ['Romance'],
     year: '2019',
+    userId: 1,
   },
   {
     id: 3,
@@ -33,6 +35,7 @@ const movies = [
       'https://yts.mx/assets/images/movies/avengers_endgame_2019/medium-cover.jpg',
     genres: ['Science Fiction', 'Action'],
     year: '2019',
+    userId: 1,
   },
 ];
 
@@ -42,14 +45,12 @@ const users = [
     username: 'test',
     email: 'asdf@asdf.com',
     password: 'asdf',
-    // nickname key와 value가 없음!
   },
   {
     id: 2,
     username: 'test2',
     email: 'qwer@qwer.com',
     password: 'qwer',
-    // nickname key와 value가 없음!
   },
 ];
 
@@ -61,7 +62,7 @@ const typeDefs = gql`
     user(id: ID!): User
   }
   type Mutation {
-    addMovie(title: String!, rating: Float!): Movie
+    addMovie(title: String!, rating: Float!, userId: ID!): Movie
     deleteMovie(id: ID!): Boolean
     updateMovie(id: ID!, rating: Float!): Movie
   }
@@ -81,6 +82,7 @@ const typeDefs = gql`
     medium_cover_image: String
     genres: [String!]!
     year: String!
+    userId: User
   }
 `;
 
@@ -90,7 +92,6 @@ const resolvers = {
       return movies;
     },
     allUsers: () => {
-      console.log('allUsers called'); // (1)
       return users;
     },
     movie: (_, { id }) => {
@@ -99,7 +100,7 @@ const resolvers = {
     user: () => {},
   },
   Mutation: {
-    addMovie: (_, { title, rating }) => {
+    addMovie: (_, { title, rating, userId }) => {
       const newMovie = {
         id: movies.length + 1,
         title,
@@ -109,6 +110,7 @@ const resolvers = {
         medium_cover_image,
         genres,
         year,
+        userId,
       };
       movies.push(newMovie);
       return newMovie;
@@ -130,16 +132,14 @@ const resolvers = {
       return null;
     },
   },
-  // Type User에 대한 Resolver
-  // typeDef의 type User에만 nickname이 있음
   User: {
-    // nickname: (root) => {
-    //   console.log('User Nickname called'); // (2)
-    //   console.log(root); // (3)
-    //   return 'test';
-    // },
     nickname: ({ username }) => {
       return `${username}_guest`;
+    },
+  },
+  Movie: {
+    userId: ({ userId }) => {
+      return users.find((user) => user.id === userId);
     },
   },
 };
