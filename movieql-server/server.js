@@ -1,6 +1,17 @@
 import { ApolloServer, gql } from 'apollo-server';
 
-// Mutation: 데이터를 추가하거나 삭제하거나 수정하는 등의 DB를 변경하는 작업을 수행하는 것들
+// Schema: Query, Mutation
+// Query: GET
+// Mutation: POST, PUT, DELETE
+
+// GET /api/v1/movies <- allMovies
+// GET /api/v1/movies/:id <- movie
+// GET /api/v1/users/:id <- user
+
+// !: 필수값
+// [String!]!: 배열, 필수값
+// [String]: 배열, 필수값 아님 (null 가능)
+// String: 필수값 아님 (null 가능)
 const typeDefs = gql`
   type Query {
     allMovies: [Movie!]!
@@ -29,9 +40,6 @@ const typeDefs = gql`
     year: String!
   }
 `;
-// GET /api/v1/movies <- allMovies
-// GET /api/v1/movies/:id <- movie
-// GET /api/v1/users/:id <- user
 
 const server = new ApolloServer({ typeDefs });
 
