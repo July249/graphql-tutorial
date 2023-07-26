@@ -36,9 +36,27 @@ const movies = [
   },
 ];
 
+const users = [
+  {
+    id: 1,
+    username: 'test',
+    email: 'asdf@asdf.com',
+    password: 'asdf',
+    // nickname key와 value가 없음!
+  },
+  {
+    id: 2,
+    username: 'test2',
+    email: 'qwer@qwer.com',
+    password: 'qwer',
+    // nickname key와 value가 없음!
+  },
+];
+
 const typeDefs = gql`
   type Query {
     allMovies: [Movie!]!
+    allUsers: [User!]!
     movie(id: ID!): Movie
     user(id: ID!): User
   }
@@ -52,6 +70,7 @@ const typeDefs = gql`
     username: String!
     email: String!
     password: String!
+    nickname: String!
   }
   type Movie {
     id: ID!
@@ -68,8 +87,11 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     allMovies: () => {
-      console.log('allMovies');
       return movies;
+    },
+    allUsers: () => {
+      console.log('allUsers called'); // (1)
+      return users;
     },
     movie: (_, { id }) => {
       return movies.find((movie) => movie.id === parseInt(id));
@@ -106,6 +128,18 @@ const resolvers = {
         return updatedMovie;
       }
       return null;
+    },
+  },
+  // Type User에 대한 Resolver
+  // typeDef의 type User에만 nickname이 있음
+  User: {
+    // nickname: (root) => {
+    //   console.log('User Nickname called'); // (2)
+    //   console.log(root); // (3)
+    //   return 'test';
+    // },
+    nickname: ({ username }) => {
+      return `${username}_guest`;
     },
   },
 };
