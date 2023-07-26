@@ -66,6 +66,9 @@ const typeDefs = gql`
     deleteMovie(id: ID!): Boolean
     updateMovie(id: ID!, rating: Float!): Movie
   }
+  """
+  User에 대한 정보를 담고 있는 객체
+  """
   type User {
     id: ID!
     username: String!
@@ -73,6 +76,9 @@ const typeDefs = gql`
     password: String!
     nickname: String!
   }
+  """
+  Movie에 대한 정보를 담고 있는 객체
+  """
   type Movie {
     id: ID!
     title: String!
