@@ -1,17 +1,41 @@
 import { ApolloServer, gql } from 'apollo-server';
 
-// Schema: Query, Mutation
-// Query: GET
-// Mutation: POST, PUT, DELETE
+const movies = [
+  {
+    id: 1,
+    title: 'Hello',
+    rating: 4.5,
+    summary: 'lorem ipsum',
+    language: 'English',
+    medium_cover_image:
+      'https://yts.mx/assets/images/movies/avengers_endgame_2019/medium-cover.jpg',
+    genres: ['Thriller', 'Action'],
+    year: '2019',
+  },
+  {
+    id: 2,
+    title: 'Hello 2',
+    rating: 4.5,
+    summary: 'lorem ipsum',
+    language: 'English',
+    medium_cover_image:
+      'https://yts.mx/assets/images/movies/avengers_endgame_2019/medium-cover.jpg',
+    genres: ['Romance'],
+    year: '2019',
+  },
+  {
+    id: 3,
+    title: 'Hello 3',
+    rating: 4.5,
+    summary: 'lorem ipsum',
+    language: 'English',
+    medium_cover_image:
+      'https://yts.mx/assets/images/movies/avengers_endgame_2019/medium-cover.jpg',
+    genres: ['Science Fiction', 'Action'],
+    year: '2019',
+  },
+];
 
-// GET /api/v1/movies <- allMovies
-// GET /api/v1/movies/:id <- movie
-// GET /api/v1/users/:id <- user
-
-// !: 필수값
-// [String!]!: 배열, 필수값
-// [String]: 배열, 필수값 아님 (null 가능)
-// String: 필수값 아님 (null 가능)
 const typeDefs = gql`
   type Query {
     allMovies: [Movie!]!
@@ -41,7 +65,20 @@ const typeDefs = gql`
   }
 `;
 
-const server = new ApolloServer({ typeDefs });
+const resolvers = {
+  Query: {
+    allMovies: () => {
+      console.log('allMovies');
+      return movies;
+    },
+    movie: (_, { id }) => {
+      return movies.find((movie) => movie.id === parseInt(id));
+    },
+    user: () => {},
+  },
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Running on ${url}`);
