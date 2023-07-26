@@ -13,6 +13,7 @@ const GET_MOVIE = gql`
         nickname
         email
       }
+      isLiked @client
     }
   }
 `;
@@ -33,6 +34,7 @@ export default function Movie() {
   return (
     <div>
       <h1>영화 제목: {data.movie.title}</h1>
+      <button type='button'>{data.movie.isLiked ? 'Unlike' : 'Like'}</button>
       <h3>리뷰어: {data.movie.userId.nickname}</h3>
       <span style={{ fontSize: 14 }}>영화 언어: {data.movie.language}</span>
       <p>영화 설명: {data.movie.summary}</p>
