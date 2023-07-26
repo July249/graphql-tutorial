@@ -76,6 +76,38 @@ const resolvers = {
     },
     user: () => {},
   },
+  Mutation: {
+    addMovie: (_, { title, rating }) => {
+      const newMovie = {
+        id: movies.length + 1,
+        title,
+        rating,
+        summary,
+        language,
+        medium_cover_image,
+        genres,
+        year,
+      };
+      movies.push(newMovie);
+      return newMovie;
+    },
+    deleteMovie: (_, { id }) => {
+      const cleanedMovies = movies.filter((movie) => movie.id !== id);
+      if (movies.length > cleanedMovies.length) {
+        movies = cleanedMovies;
+        return true;
+      }
+      return false;
+    },
+    updateMovie: (_, { id, rating }) => {
+      const updatedMovie = movies.find((movie) => movie.id === id);
+      if (updatedMovie) {
+        updatedMovie.rating = rating;
+        return updatedMovie;
+      }
+      return null;
+    },
+  },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
